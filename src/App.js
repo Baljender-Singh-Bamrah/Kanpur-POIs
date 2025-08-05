@@ -1,7 +1,33 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+
+// Fix for default marker icons in react-leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+});
+
+// Component to handle map focus
+function MapFocus({ filteredPOIs, filter }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (filter !== 'All' && filteredPOIs.length > 0) {
+      // Focus on the first marker of the filtered category
+      const firstPOI = filteredPOIs[0];
+      map.setView(firstPOI.position, 15);
+    } else if (filter === 'All') {
+      // Reset to default view for all POIs
+      map.setView([26.4850, 80.3319], 13);
+    }
+  }, [filter, filteredPOIs, map]);
+
+  return null;
+}
 
 // Sample POIs
 const POIS = [
@@ -28,24 +54,47 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Kanpur Points of Interest</h1>
-      <div style={{ marginBottom: 10 }}>
+      <div className="app-header">
+        <h1 className="app-title">Kanpur Points of Interest</h1>
+        <p className="app-subtitle">Discover the vibrant landmarks and attractions of Kanpur</p>
+      </div>
+      
+      <div className="filter-buttons">
         {categories.map(cat => (
-          <button key={cat} onClick={() => setFilter(cat)} style={{ marginRight: 5, fontWeight: filter === cat ? 'bold' : 'normal' }}>{cat}</button>
+          <button 
+            key={cat} 
+            onClick={() => setFilter(cat)} 
+            className={`filter-button ${filter === cat ? 'active' : ''}`}
+          >
+            {cat}
+          </button>
         ))}
       </div>
+      
       <div className="map-container">
-        <MapContainer center={[26.4499, 80.3319]} zoom={13} style={{ height: '80vh', width: '90vw', margin: 'auto' }}>
+        <MapContainer 
+          center={[26.4850, 80.3319]} 
+          zoom={13} 
+          style={{ height: '100%', width: '100%' }}
+          zoomControl={true}
+          scrollWheelZoom={true}
+        >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <MapFocus filteredPOIs={filteredPOIs} filter={filter} />
           {filteredPOIs.map(poi => (
-            <Marker key={poi.id} position={poi.position} icon={L.icon({ iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41] })}>
+            <Marker 
+              key={poi.id} 
+              position={poi.position}
+            >
               <Popup>
-                <b>{poi.name}</b><br />
-                {poi.type}<br />
-                {poi.description}
+                <div>
+                  <b>{poi.name}</b>
+                  <div className="poi-type">{poi.type}</div>
+                  <div className="poi-description">{poi.description}</div>
+                </div>
               </Popup>
             </Marker>
           ))}
