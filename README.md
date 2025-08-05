@@ -4,6 +4,11 @@
 
 ---
 
+## 🔗 Live Demo
+
+🌐 [View Live Website](https://kanpur-poi.netlify.app/)
+
+---
 ## 🚀 Features
 
 - 🗺️ Interactive map with smooth zoom and pan
@@ -12,6 +17,16 @@
 - 📱 Fully responsive layout for desktop, tablet, and mobile
 - ⚛️ Built using React Hooks and functional components
 - ⚙️ Optimized performance and clean UI
+
+---
+## 📸 Preview
+
+> *Screenshot of the app showcasing the interactive map and POI filters.*
+![Kanpur POI Map Preview](./Preview/1.png)
+
+> *Screenshot of the app showcasing POI acoordingly to filter.*
+![Kanpur POI Map Preview](./Preview/2.png)
+
 
 ---
 
