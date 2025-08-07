@@ -24,8 +24,8 @@
 > *Screenshot of the app showcasing the interactive map and POI filters.*
 ![Kanpur POI Map Preview](./Preview/1.png)
 
-> *Screenshot of the app showcasing POI acoordingly to filter.*
-![Kanpur POI Map Preview](./Preview/2.png)
+> *Screenshot of the app showcasing Popup and details about the POI on click.*
+![Kanpur POI Map Preview](./Preview/3.png)
 
 
 ---
